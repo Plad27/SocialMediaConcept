@@ -29,11 +29,11 @@ app.get('/feedback', (req, res) => {
   
 // Route to subscribe page
 app.post('/subscribe', async (req, res) => {
-  const { email } = req.body;
+  const { email_id } = req.body;
 
   try {
     
-    await pool.query('INSERT INTO subscribers (email) VALUES ($1)', [email]);
+    await pool.query('INSERT INTO email_subscribers.email_id VALUES ($1)', [email_id]);
     res.send('Thank you for subscribing! You will receive the latest updates.');
   } catch (err) {
     console.error(err);
