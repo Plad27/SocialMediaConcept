@@ -19,12 +19,12 @@ app.use(express.static('public'));
 
 // Route to Home Page
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/public/index.html');
+  res.sendFile('index.html');
 });
 
 // Route to feedback page
 app.get('/feedback', (req, res) => {
-    res.sendFile(__dirname + '/public/feedback.html');
+    res.sendFile('feedback.html');
   });
   
 // Route to subscribe page
