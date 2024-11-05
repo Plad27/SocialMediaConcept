@@ -5,8 +5,8 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-        <img src="2logo.png" alt="logo" class="logo">
-        <a href="" class="signupbutton"> Sign up</a>
+        <img src="/assests/2logo.png" alt="logo" class="logo">
+        <a href="loginPage.html" class="signupbutton"> Sign up</a>
         <a href="" class="loginbutton"> login</a>
     </head>
     <header>
@@ -14,12 +14,12 @@
             <ul>
                 
                 <li><a href="index.html">Home</a></li>
-                <li><a href="index.html">Concept</a></li>
-                <li>><a href="subscribe.html">Register</a></li>
+                <li><a href="concept.html">Concept</a></li>
                 <li><a href="feedback.html">Feedback</a></li>
             </ul>
         </nav>  
     </header>
+        <!-- implementing the CSS as the page has very less contents and it is easier to load the page incase of routing   -->
      <style>
         body {
             font-family: Urbanist;
@@ -42,9 +42,11 @@
         form {
             display: flex;
             flex-direction: column;
+            color: white;
         }
         label {
             margin: 10px 0 5px;
+            color: white;
         }
         input[type="text"], input[type="email"], textarea {
             width: 100%;
@@ -53,6 +55,7 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 16px;
+            color: white;
         }
         button {
             width: 100%;
