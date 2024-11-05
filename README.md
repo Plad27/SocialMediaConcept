@@ -19,10 +19,12 @@ Current the project is a responsive website, where one can login if they are pre
 I provided you with screenshots of my database structure to give you a better idea how it is desgined and implemented. 
 
 
+
 ![image](https://github.com/user-attachments/assets/3663f43f-0dd2-4d6a-9b1e-d7740f86f8a0)
 ![image](https://github.com/user-attachments/assets/bbc58214-537e-4e7a-bada-4d5020def20e)
 ![image](https://github.com/user-attachments/assets/31cd24f4-e3ba-49ed-8661-40c5a0a6f85f)
 ![image](https://github.com/user-attachments/assets/8b46c7f7-bd4d-47e1-867a-47577457d3c5)
+![image](https://github.com/user-attachments/assets/40c2c978-ee5c-404b-8a67-93cfb6a96f08)
 ![image](https://github.com/user-attachments/assets/3e30920e-4d3a-4d99-adc1-4ddaaba99e47)
 
 
