@@ -37,32 +37,14 @@ app.set('views', path.join(__dirname, 'views'))
 
 //connecting to database
 connectDB();
-// mongoose.connect('mongodb://127.0.0.1:27017/')
+
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 
-// //defining a new user and saving it 
-// const createUser = async () => {
-//     try {
-//         const newUser = new User({
-//             userId: "plad",
-//             password: "plassword"
-//         });
-//         const savedUser = await newUser.save();
-//         console.log('User saved:', savedUser);
-//     } catch (err) {
-//         console.error('Error saving user:', err);
-//     }
-// };
 
-// // Call the function to create a user
-// createUser();
-
-//Static routes are here - PLAD : YOU CAN MAKE THE FILE STRUCTURE SUCH THAT IT REFLECTS THIS BETTER 
-// YOU CAN ALSO DO THIS WITH THE IMPORT ROUTER THINGY
-
+//Static routes 
 app.get('/', (request, response) => {
     response.render('index')
   })
@@ -159,16 +141,16 @@ app.get('/edit/:userId', async (request, response) => {
 });
 app.post('/edit/:userId', async (request, response) => {
     try {
-        const userId = request.params.userId;  // Define userId here
+        const userId = request.params.userId; 
         console.log('Updating user:', userId);
         console.log('New data:', request.body);
 
         const updatedUser = await User.findOneAndUpdate(
-            { userId: userId },  // Use userId here
+            { userId: userId }, 
             {
                 userId: request.body.userId,
                 emailId: request.body.emailId
-                // Add other fields you want to update
+                
             },
             { new: true}
         );
@@ -200,14 +182,14 @@ app.post('/edit/:userId/del', async (request, response) => {
         }
 
         console.log('Deleted user:', deletedUser);
-        response.redirect('/'); // Redirect to home page or user list page
+        response.redirect('/'); 
     } catch (error) {
         console.error('Error deleting user:', error);
-        response.status(500).send('Error: The user could not be deleted. ' + error.message);
+
     }
 });
 
 
 app.listen(PORT, () => {
-  console.log(`👋 Started server on port ${PORT}`)
+  console.log(`hello hello started server on port ${PORT}`)
 })
