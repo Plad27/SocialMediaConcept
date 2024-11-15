@@ -1,98 +1,213 @@
-// const express = require('express');
-// const router = express.Router();
-// const bodyParser = require('body-parser');
-// const { Pool } = require('pg');
+import dotenv from 'dotenv';
+dotenv.config();
+import express, { response } from 'express'
 
-// const app = express();
-
-
-// const pool = new Pool({
-//   user: 'postgres',
-//   host: 'localhost',
-//   database: 'VibeDev',
-//   password: '12345',
-//   port: 5432,
-// });
+import  {logger}  from './middleware/logger.js'
+import { fileURLToPath } from 'url'
+import path from 'path'
 
 
-// app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(express.static('public'));
 
-// // test route 
-// app.get('/test', (req, res) => {
-//   res.send('test');
-//   console.log('test');
-// });
+import connectDB from './config/database.js'
 
-// // Route to Home Page
-// app.get('/', (req, res) => {
-//   res.sendFile('index.html');
-// });
+//calling the schema 
+import User from "./models/userSchema.js"
 
-// // Route to feedback page
-// app.get('/feedback', (req, res) => {
-//     console.log('Feedback received')
-//     res.send('Thank you for sending your feedback');
-//   });
-  
-// // Route to subscribe page
-// app.post('/subscribe/:email_id', async (req, res) => {
-//   const { email_id } = req.body;
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
-//   try {
-    
-//     await pool.query('INSERT INTO email_subscribers.email_id VALUES ($1)', [email_id]);
-//     res.send('Thank you for subscribing! You will receive the latest updates.');
-//   } catch (err) {
-//     console.error(err);
-//     res.send('There was an error saving your subscription.');
-//   }
-// });
 
-// // Viewing all the users from websites 
-// app.get('/subs/:id', async (req, res) => {
-//   const id = req.params.id;
-  
-//   try {
-    
-//     const result = await pool.query('SELECT * FROM email_subscribers WHERE id = $1', [id]);
+const app = express()
+const PORT = 3000
 
-//     if (result.rows.length > 0) {
-//       const user = result.rows[0];
-//       res.send(`
-//         <p>Email: ${email_subscribers.emai_id}</p>
-//         <p>Joined on: ${email_subscribers.joined_date}</p>
-//       `);
-//     } else {
-//       res.status(404).send('User not found.');
+app.use('/assests', express.static('assests'));
+app.use(express.static('public'));
+
+//using middleware
+app.use(logger)
+
+//using a route to receive static files 
+app.use('/assests', express.static('assests'))
+
+app.use(express.static('.'))
+
+//configuring express 
+app.set('view engine', 'ejs')
+app.set('views', path.join(__dirname, 'views'))
+
+//connecting to database
+connectDB();
+// mongoose.connect('mongodb://127.0.0.1:27017/')
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+
+// //defining a new user and saving it 
+// const createUser = async () => {
+//     try {
+//         const newUser = new User({
+//             userId: "plad",
+//             password: "plassword"
+//         });
+//         const savedUser = await newUser.save();
+//         console.log('User saved:', savedUser);
+//     } catch (err) {
+//         console.error('Error saving user:', err);
 //     }
-//   } catch (err) {
-//     console.error(err);
-//   }
-// });
+// };
+
+// // Call the function to create a user
+// createUser();
+
+//Static routes are here - PLAD : YOU CAN MAKE THE FILE STRUCTURE SUCH THAT IT REFLECTS THIS BETTER 
+// YOU CAN ALSO DO THIS WITH THE IMPORT ROUTER THINGY
+
+app.get('/', (request, response) => {
+    response.render('index')
+  })
+app.get('/contact', (request, response) => {
+    response.send('Reach out to us if you have any questions.')
+  })
+  
+app.get('/test', (request, response) => {
+    response.send('test t e s t') 
+  })
 
 
-// //Login with respect username and password 
-// app.post('/login', async (req, res) => {
-//   const { username, password } = req.body;
 
-//   try {
-//       const result = await pool.query('SELECT * FROM users WHERE username = $1 AND password = $2', [username, password]);
+//PAGE NAV ROUTES 
 
-//       if (result.rows.length > 0) {
-          
-//           res.sendFile(userPage.html)
-//       } else {
-//           res.send('Invalid username or password.');
-//       }
-//   } catch (err) {
-//       console.error(err)
-//   }
-// });
+app.get('/feedback', (request, response) => {
+    response.sendFile('feedback.html', { root: '.' })
+})
+
+app.get('/register', (request, response) => {
+    response.render('signupPage')
+  })
+
+//DYNAMIC ROUTES 
+app.get('/users/:userId', (request, response) => {
+    const userId = request.params.userId
+  
+    response.send(`You are now viewing ${userId}'s page`)
+  })
+
+//Nested Routes 
+app.get('/users/:userId/friend/:frndId', (request, response) => {
+    const userId = request.params.userId
+    const frndId = request.params.frndIdId
+  
+    response.send(`the user ID is ${userId} they are friends with ${frndId}`)
+  })
 
 
-// //sever listening 
-// const PORT = process.env.PORT || 3000;
-// app.listen(PORT, () => {
-//   console.log(`Server is running on port ${PORT}`);
-// });
+//FORM action route
+
+app.post('/feedback/send', (request, response) => {
+    console.log('Contact form submission: ', request.body)
+    response.send('thank you for your feedback')
+ })
+
+app.post('/register/send', async(request, response) => {
+    try{
+        const userRegis = new User({
+            userId : request.body.username,
+            password: request.body.password,
+            emailId: request.body.email
+
+        })
+        await userRegis.save()
+        response.send("new user succesfully created")
+    }
+    catch (error) {
+        console.error(error)
+        response.send('user could not be created')
+    }
+ })
+
+//route for database reading 
+
+app.get('/getinfo/:userId', async (request, response) => {
+    try {
+        const userId = request.params.userId;
+        const user = await User.findOne({ userId: userId });
+        
+        if (user) {
+            response.render('userPage', { User: user });
+        } else {
+            response.status(404).send('User not found');
+        }
+    } catch (error) {
+        console.error('Error fetching user:', error);
+    }
+});
+
+app.get('/edit/:userId', async (request, response) => {
+    try {
+        const userId = request.params.userId;
+        const user = await User.findOne({ userId: userId }).exec();
+        
+        if (!user) {
+            return response.status(404).send('User not found');
+        }
+
+        response.render('userUpdaDelPage', { User: user });
+    } catch (error) {
+        console.error('Error fetching user:', error);
+    }
+});
+app.post('/edit/:userId', async (request, response) => {
+    try {
+        const userId = request.params.userId;  // Define userId here
+        console.log('Updating user:', userId);
+        console.log('New data:', request.body);
+
+        const updatedUser = await User.findOneAndUpdate(
+            { userId: userId },  // Use userId here
+            {
+                userId: request.body.userId,
+                emailId: request.body.emailId
+                // Add other fields you want to update
+            },
+            { new: true}
+        );
+
+        if (!updatedUser) {
+            console.log('User not found:', userId);
+        }
+
+        console.log('Updated user:', updatedUser);
+        response.redirect(`/edit/${updatedUser.userId}`);
+
+
+    } catch (error) {
+        console.error('Error updating user:', error);
+    }
+});
+
+
+app.post('/edit/:userId/del', async (request, response) => {
+    try {
+        const userId = request.params.userId;
+        console.log('Attempting to delete user:', userId);
+
+        const deletedUser = await User.findOneAndDelete({ userId: userId });
+
+        if (!deletedUser) {
+            console.log('User not found:', userId);
+            return response.status(404).send('User not found');
+        }
+
+        console.log('Deleted user:', deletedUser);
+        response.redirect('/'); // Redirect to home page or user list page
+    } catch (error) {
+        console.error('Error deleting user:', error);
+        response.status(500).send('Error: The user could not be deleted. ' + error.message);
+    }
+});
+
+
+app.listen(PORT, () => {
+  console.log(`👋 Started server on port ${PORT}`)
+})
