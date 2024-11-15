@@ -11,35 +11,41 @@
         <link href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
         
         <img src="/assests/logo.png" alt="logo" class="logo">
-        -
-        <a href="signupPage.html" class="signupbutton"> Sign up</a>
-        <a href="loginPage.html" class="loginbutton"> login</a>
-        -
+        
     </head>
+    <style>
+        *{
+        font-family: Urbanist;
+        background-color: #000000;
+        }
+        .logo {
+            width: 150px;
+            height: 60px;
+            margin: 10px;
+            position:absolute;
+            top: 0;
+            left: 0;
+        }
+
+
+    </style>
     <header>
         <nav>
             <div class="top-menu">
                 </button>
                     <ul class="top-menu-links">
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="concept.html">Concept</a></li>
-                        <li><a href="feedback.html">Feedback</a></li>
+                                               
                     </ul> 
             
             </div>
         </nav>
     </header>
-    <body>
-        <h1 class="commingsoon-text">Coming soon</h1>
-        
-        <h4 class="heading-font">Making social media authentic again</h4>
-        <p class="homepagetext">
-         social media which makes you feel connected again      
+    <body style="color: #ffffff";>
         <br>
-        <br>   
-        <a href="concept.html" class="learn-more-button"> Learn more </a>
-        </p>
-        
+        <br>
+        <br>
+        <h3> You are now viewing <%= User.userId%>'s page</h3>
+        <p>Contact :<%= User.emailId %> </p>
     </body>
 
 </html>
