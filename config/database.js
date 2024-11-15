@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
        const dbUri = process.env.CONNECTION_STRING;
        
        if (!dbUri) {
-           console.error('DB_CONNECTION_STRING is not defined in the environment');
+           console.error('CONNECTION_STRING is not defined in the environment');
            process.exit(1);
        }
 
